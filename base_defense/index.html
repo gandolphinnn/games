@@ -11,6 +11,10 @@
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 			let ctx = canvas.getContext("2d");
+			const fieldx = {
+			min: (canvas.width - canvas.height) / 2,
+			max: canvas.width - (canvas.width - canvas.height) / 2,
+		}
 		</script>
 		<script src="data.js"></script>
 		<script src="classes.js"></script>

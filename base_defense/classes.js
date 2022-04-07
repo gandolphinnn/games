@@ -59,8 +59,18 @@ class Tank {
 			this.degr.cannon = 180 - this.degr.cannon;
 		}
 	}
+	move() {
+		if (this.coord.x < fieldx.max - 70) {
+			this.coord.x++;
+		}
+		else if(this.degr.body != 270) {
+			this.degr.body = formA(this.degr.body-0.5);
+		}
+		else {
+			this.coord.y++;
+		}
+	}
 	draw() {
-		this.coord.x++;
 		let cont = canvas.getContext("2d");	
 		cont.save();
 		cont.translate(this.coord.x, this.coord.y);
