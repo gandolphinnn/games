@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Minesweeper</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<canvas style="height: 100%; width: 100%"></canvas>
+	</body>
+	<script>
+		document.addEventListener('mousedown', function(e) {
+			mouse.state = e.button;
+		});
+		document.addEventListener('contextmenu', event => event.preventDefault());
+		document.addEventListener('mouseup', function(e) {
+			mouse.state = null;
+		});
+		document.addEventListener('mousemove', function(e) {
+			mouse.pos.y = e.clientY;
+			mouse.pos.x = e.clientX;
+		});
+		class Coord {
+			constructor(y, x) {
+				this.y = y;
+				this.x = x;
+			}
+		}
+		let mouse = {
+			pos: new Coord(null, null),
+			state: null
+		}
+		let canvas = document.querySelector("canvas");
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		let ctx = canvas.getContext("2d");
+	</script>
+	<script src="minesweeper.js"></script>
+</html>
