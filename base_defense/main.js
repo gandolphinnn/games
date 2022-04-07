@@ -5,6 +5,7 @@ window.onload = function() {
 	});
 	function animate() {
 		ctx.clearRect(0,0, innerWidth, innerHeight);
+		game.play();
 		game.draw();
 		requestAnimationFrame(animate);
 	}

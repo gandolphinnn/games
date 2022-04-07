@@ -42,9 +42,40 @@ class Projectile {
 class Tank {
 	constructor(type) {
 		this.type = type;
-		this.coord;
-		this.hp = enemy[type].hp;
-		this.weapon = enemy[type].weapon;
+		this.coord = new Coord(600, 100);
+		this.degr = { //* these values MUST be converted for the cont rotation
+			body: 0,
+			cannon: 0
+		}
+		this.hp = tank[type].hp;
+		this.weapon = tank[type].weapon;
+	}
+	aim(pCoord) {
+		let sin = this.coord.y - pCoord.y;
+		let cos = pCoord.x - this.coord.x;
+		let dist = Math.sqrt((sin ** 2)+(cos ** 2));
+		this.degr.cannon = formA(Math.asin(sin/dist), 'degr');
+		if (cos < 0) {
+			this.degr.cannon = 180 - this.degr.cannon;
+		}
+	}
+	draw() {
+		this.coord.x++;
+		let cont = canvas.getContext("2d");	
+		cont.save();
+		cont.translate(this.coord.x, this.coord.y);
+		let body = document.createElement("img");
+		body.src = 'texture/' + this.type + '_body.png';
+		cont.rotate(formA(90 - this.degr.body, 'rad'));
+		body.onload = cont.drawImage(body, -body.width/2, -body.height/2, body.width, body.height);
+		cont.restore();
+		cont.save();
+		cont.translate(this.coord.x, this.coord.y);
+		let cannon = document.createElement("img");
+		cannon.src = 'texture/' + this.type + '_cannon.png';
+		cont.rotate(formA(90 - this.degr.cannon, 'rad'));
+		cannon.onload = cont.drawImage(cannon, -cannon.width/2, -cannon.height/2, cannon.width, cannon.height);
+		cont.restore();
 	}
 }
 class Player {
@@ -65,7 +96,7 @@ class Player {
 	calcBarr() {
 		let sin = this.coord.y - mouse.pos.y;
 		let cos = mouse.pos.x - this.coord.x;
-		let dist = Math.sqrt((sin ** 2)+(cos ** 2))
+		let dist = Math.sqrt((sin ** 2)+(cos ** 2));
 		let mAngle = formA(Math.asin(sin/dist), 'degr');
 		if (cos < 0) {
 			mAngle = 180 - mAngle;
@@ -100,21 +131,5 @@ class Player {
 		ctx.strokeStyle = 'blue';
 		ctx.lineWidth = 5;
 		ctx.stroke();
-
-		ctx.save();
-		let image = document.createElement("img");
-		image.src="texture/und.png";
-		image.onload =()=>{ctx.drawImage(image,canvas.width/2-image.width/2,canvas.height/2-image.width/2)}
-		ctx.rotate(this.barr.degr*-Math.PI/180);
-		ctx.drawImage(image,-image.width/2,-image.width/2);
-		ctx.restore();
-		
-		ctx.save();
-		let img2 = document.createElement("img");
-		img2.src="texture/und.png";
-		img2.onload =()=>{ctx.drawImage(img2,canvas.width/2-img2.width/2,canvas.height/2-img2.width/2)}
-		ctx.rotate(this.barr.degr*Math.PI/180);
-		ctx.drawImage(img2,-img2.width/2,-img2.width/2);
-		ctx.restore();
 	}
 }
