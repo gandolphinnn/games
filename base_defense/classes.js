@@ -38,6 +38,10 @@ class Projectile {
 		let dx = Math.cos(formA(this.degr, 'rad')) * this.speed;
 		let dy = -1 * Math.sin(formA(this.degr, 'rad')) * this.speed;
 		this.coord.add(dx, dy);
+		if (dist(this.coord, new Coord(canvas.width/2, canvas.height/2)) <= player.dim.r) {
+			return true;
+		}
+		return false;
 	}
 	draw() {
 		ctx.beginPath();
@@ -46,51 +50,64 @@ class Projectile {
 	}
 }
 class Tank {
-	constructor(type, dim, spawndata) {
+	constructor(type, dim, data) {
 		this.type = type;
 		this.dim = dim;
-		console.log(this.dim);
-		this.coord = addCoord(spawndata.coord,
-					(this.dim.w / 2 + offset) * spawndata.multX, (this.dim.h / 2 + offset) * spawndata.multY);
-		this.degr = { //* these values MUST be converted for the cont rotation
-			body: spawndata.degr,
-			cannon: 0
-		}
+		let dimx = (data.degr % 180 == 0)? this.dim.h /2 : this.dim.w /2;
+		let dimy = (data.degr % 180 == 0)? this.dim.w /2 : this.dim.h /2;
+		this.coord = addCoord(data.coord, (dimx + offset) * data.multX, (dimy + offset) * data.multY);
+		this.degr = {body: data.degr, cannon: 0}
 		this.hp = tank[type].hp;
 		this.as = tank[type].as;
-		this.projects = new Array();
+		this.proj = null;
 		this.rotateTo = null;
+		this.rotPoints = [
+			new Coord(cornerPos[0].coord.x + this.dim.w / 2, cornerPos[0].coord.y + this.dim.w /  2),
+			new Coord(cornerPos[1].coord.x - this.dim.w / 2, cornerPos[1].coord.y + this.dim.w /  2),
+			new Coord(cornerPos[2].coord.x - this.dim.w / 2, cornerPos[2].coord.y - this.dim.w /  2),
+			new Coord(cornerPos[3].coord.x + this.dim.w / 2, cornerPos[3].coord.y - this.dim.w /  2)
+		]
+		console.log(this.rotPoints);
+		console.log(this.coord);
 	}
 	aim(pCoord) {
-		let sin = this.coord.y - pCoord.y;
-		let cos = pCoord.x - this.coord.x;
-		let dist = Math.sqrt((sin ** 2)+(cos ** 2));
-		this.degr.cannon = formA(Math.asin(sin/dist), 'degr');
-		if (cos < 0) {
+		this.degr.cannon = formA(Math.asin((this.coord.y - pCoord.y)/dist(this.coord, pCoord)), 'degr');
+		if (pCoord.x < this.coord.x) {
 			this.degr.cannon = 180 - this.degr.cannon;
 		}
 	}
-	shoot() { //todo fix this
-		setInterval(() => {
-			if (this.rotateTo == null)
-			{
-				this.projects.push(new Projectile(this.type, this.coord, this.degr.cannon));
-			}
-		}, this.as);
+	shoot() {
+		if (this.proj == null && this.rotateTo == null)
+		{
+			setTimeout(() => {
+				let cannonCoord = this.coord;
+				this.proj = new Projectile(this.type, cannonCoord, this.degr.cannon);
+			}, this.as);
+		}
 		else {
-			this.projects.forEach(project => {
-				project.move();
-				project.draw();
-				if (project.coord.x == canvas.width / 2 && project.coord.y == canvas.height / 2) {
-					project = null;
-				}
-			});
+			if (this.proj.move()) {
+				this.proj = null;
+			}
+			else {
+				this.proj.draw();
+			}
 		}
 	}
+	rotate() {
+		console.log('+');
+	}
 	move() {
-		let dx = Math.cos(formA(this.degr.body, 'rad'));
-		let dy = -1 * Math.sin(formA(this.degr.body, 'rad'));
-		this.coord.add(dx, dy);
+		if (this.rotateTo != null) {
+			this.rotate();
+			return
+		}
+		this.coord.add(Math.cos(formA(this.degr.body, 'rad')), -1 * Math.sin(formA(this.degr.body, 'rad')));
+		for (let i = 0; i < 4; i++) {
+			if(this.coord.x == this.rotPoints.x && this.coord.y == this.rotPoints.y) {
+				this.rotateTo = cornerPos[i].rotateTo[rand(0, 1)];
+				break;
+			}
+		}
 	}
 	draw() {
 		let cont = canvas.getContext("2d");	
@@ -108,5 +125,10 @@ class Tank {
 		cont.rotate(formA(90 - this.degr.cannon, 'rad'));
 		cannon.onload = cont.drawImage(cannon, -cannon.width/2, -cannon.height/2, cannon.width, cannon.height);
 		cont.restore();
+		this.rotPoints.forEach(p => {
+			ctx.beginPath();
+			ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+			ctx.fill();
+		});
 	}
 }

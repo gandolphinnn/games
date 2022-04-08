@@ -15,6 +15,9 @@ class Coord {
 function addCoord(coord, addx, addy) {
 	return new Coord(coord.x + addx, coord.y + addy);
 }
+function dist(coord1, coord2) {
+	return Math.sqrt(((coord1.x - coord2.x) ** 2) + ((coord1.y - coord2.y) ** 2));
+}
 let tank = {
 	normal: {
 		hp: 10,
@@ -40,13 +43,14 @@ const fieldx = {
 	max: canvas.width - (canvas.width - canvas.height) / 2
 }
 const offset = 10;
+//! rewrote all of this better, change names and check width and height values
 const cornerPos = [
-	{coord: new Coord(fieldx.min + offset, offset), rotateTo: [0, 270]},
-	{coord: new Coord(fieldx.max - offset, offset), rotateTo: [180, 270]},
-	{coord: new Coord(fieldx.max - offset, canvas.height - offset), rotateTo: [90, 180]},
-	{coord: new Coord(fieldx.min + offset, canvas.height - offset), rotateTo: [0, 90]},
+	{coord: new Coord(fieldx.min + offset, offset), rotateTo: [0, 270]}, //top-left
+	{coord: new Coord(fieldx.max - offset, offset), rotateTo: [180, 270]}, //top-right
+	{coord: new Coord(fieldx.max - offset, canvas.height - offset), rotateTo: [90, 180]}, //bottom-right
+	{coord: new Coord(fieldx.min + offset, canvas.height - offset), rotateTo: [0, 90]}, //bottom-left
 ]
-const spawnPos = [
+const spawnPos = [ //todo based on cornerPos
 	[{coord: new Coord(fieldx.min, offset), degr: 0, multX: -1, multY: 1}, //top-left (left)
 	{coord: new Coord(fieldx.min + offset, 0), degr: 270, multX: 1, multY: -1}], //top-left (top)
 

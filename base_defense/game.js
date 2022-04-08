@@ -20,13 +20,11 @@ class Game {
 		this.player.calcBarr();
 	}
 	draw() {
-		
-		/*for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 4; i++) {
 			ctx.beginPath();
-			ctx.arc(spawnPos[i][0].coord.x, spawnPos[i][0].coord.y, 20, 0, Math.PI*2);
-			ctx.arc(spawnPos[i][1].coord.x, spawnPos[i][1].coord.y, 20, 0, Math.PI*2);
+			ctx.arc(cornerPos[i].coord.x, cornerPos[i].coord.y, offset, 0, Math.PI*2);
 			ctx.stroke();
-		}*/
+		}
 		
 		this.player.draw();
 		this.tanks.forEach(tank => {

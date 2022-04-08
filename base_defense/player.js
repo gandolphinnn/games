@@ -14,11 +14,8 @@ class Player {
 		}
 	}
 	calcBarr() {
-		let sin = this.coord.y - mouse.pos.y;
-		let cos = mouse.pos.x - this.coord.x;
-		let dist = Math.sqrt((sin ** 2)+(cos ** 2));
-		let mAngle = formA(Math.asin(sin/dist), 'degr');
-		if (cos < 0) {
+		let mAngle = formA(Math.asin((this.coord.y - mouse.pos.y)/dist(this.coord, mouse.pos)), 'degr');
+		if (mouse.pos.x - this.coord.x < 0) {
 			mAngle = 180 - mAngle;
 		}
 		this.barr.degr = mAngle + 90;
