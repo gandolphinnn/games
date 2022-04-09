@@ -3,6 +3,13 @@ window.onload = function() {
 		mouse.pos.y = e.clientY;
 		mouse.pos.x = e.clientX;
 	});
+	document.addEventListener('mousedown', function(e) {
+		if (e.button == 0)
+			mouse.click = true;
+	});
+	document.addEventListener('mouseup', function(e) {
+		mouse.click = false;
+	});
 	function animate() {
 		ctx.clearRect(0,0, innerWidth, innerHeight);
 		game.engine();

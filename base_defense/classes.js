@@ -24,7 +24,8 @@ function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 let mouse = {
-	pos: new Coord(null, null)
+	pos: new Coord(null, null),
+	click: false
 }
 class Projectile {
 	constructor(type, coord, degr) {
