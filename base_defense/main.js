@@ -17,8 +17,8 @@ window.onload = function() {
 			dim = {w: body.width, h:body.height};
 			for (let i = 0; i < 4; i++) {
 				ctx.beginPath();
-				let x = cornerPos[i].coord.x + dim.w/2 * spawnPos[i][0].multY;
-				let y = cornerPos[i].coord.y + dim.w/2 * spawnPos[i][1].multX;
+				let x = offsetPos[i].coord.x + dim.w/2 * spawnPos[i][0].multY;
+				let y = offsetPos[i].coord.y + dim.w/2 * spawnPos[i][1].multX;
 				ctx.arc(x, y, 50, 0, Math.PI*2);
 				ctx.stroke();
 			}

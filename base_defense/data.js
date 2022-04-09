@@ -36,21 +36,20 @@ const player = {
 	dim: {w: 60, h: 40, r: 70},
 	barrLen: 120,
 	maxhp: 100,
-	maxsh: 100,
+	maxsh: 10,
 }
 const fieldx = {
 	min: (canvas.width - canvas.height) / 2,
 	max: canvas.width - (canvas.width - canvas.height) / 2
 }
-const offset = 10;
-//! rewrote all of this better, change names and check width and height values
-const cornerPos = [
+const offset = 20;
+const offsetPos = [
 	{coord: new Coord(fieldx.min + offset, offset), rotateTo: [0, 270]}, //top-left
 	{coord: new Coord(fieldx.max - offset, offset), rotateTo: [180, 270]}, //top-right
 	{coord: new Coord(fieldx.max - offset, canvas.height - offset), rotateTo: [90, 180]}, //bottom-right
 	{coord: new Coord(fieldx.min + offset, canvas.height - offset), rotateTo: [0, 90]}, //bottom-left
 ]
-const spawnPos = [ //todo based on cornerPos
+const spawnPos = [
 	[{coord: new Coord(fieldx.min, offset), degr: 0, multX: -1, multY: 1}, //top-left (left)
 	{coord: new Coord(fieldx.min + offset, 0), degr: 270, multX: 1, multY: -1}], //top-left (top)
 

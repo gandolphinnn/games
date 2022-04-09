@@ -2,6 +2,10 @@ class Game {
 	constructor() {	
 		this.player = new Player();
 		this.tanks = new Array();
+		this.level = 1;
+		this.money = 0;
+		this.medikit = 0;
+		this.upgrades; //todo
 	}
 	spawnTank(type) {
 		let body = document.createElement("img");
@@ -20,12 +24,6 @@ class Game {
 		this.player.calcBarr();
 	}
 	draw() {
-		for (let i = 0; i < 4; i++) {
-			ctx.beginPath();
-			ctx.arc(cornerPos[i].coord.x, cornerPos[i].coord.y, offset, 0, Math.PI*2);
-			ctx.stroke();
-		}
-		
 		this.player.draw();
 		this.tanks.forEach(tank => {
 			tank.draw();

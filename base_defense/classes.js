@@ -34,7 +34,7 @@ class Projectile {
 		this.damage = tank[type].damage;
 		this.speed = tank[type].speed;
 	}
-	move() {
+	move() { //todo must hit everything, not only the base but the barrier and the tanks
 		let dx = Math.cos(formA(this.degr, 'rad')) * this.speed;
 		let dy = -1 * Math.sin(formA(this.degr, 'rad')) * this.speed;
 		this.coord.add(dx, dy);
@@ -55,20 +55,18 @@ class Tank {
 		this.dim = dim;
 		let dimx = (data.degr % 180 == 0)? this.dim.h /2 : this.dim.w /2;
 		let dimy = (data.degr % 180 == 0)? this.dim.w /2 : this.dim.h /2;
-		this.coord = addCoord(data.coord, (dimx + offset) * data.multX, (dimy + offset) * data.multY);
+		this.coord = addCoord(data.coord, dimx * data.multX, dimy * data.multY);
 		this.degr = {body: data.degr, cannon: 0}
 		this.hp = tank[type].hp;
 		this.as = tank[type].as;
 		this.proj = null;
 		this.rotateTo = null;
 		this.rotPoints = [
-			new Coord(cornerPos[0].coord.x + this.dim.w / 2, cornerPos[0].coord.y + this.dim.w /  2),
-			new Coord(cornerPos[1].coord.x - this.dim.w / 2, cornerPos[1].coord.y + this.dim.w /  2),
-			new Coord(cornerPos[2].coord.x - this.dim.w / 2, cornerPos[2].coord.y - this.dim.w /  2),
-			new Coord(cornerPos[3].coord.x + this.dim.w / 2, cornerPos[3].coord.y - this.dim.w /  2)
+			new Coord(offsetPos[0].coord.x + this.dim.w / 2, offsetPos[0].coord.y + this.dim.w /  2),
+			new Coord(offsetPos[1].coord.x - this.dim.w / 2, offsetPos[1].coord.y + this.dim.w /  2),
+			new Coord(offsetPos[2].coord.x - this.dim.w / 2, offsetPos[2].coord.y - this.dim.w /  2),
+			new Coord(offsetPos[3].coord.x + this.dim.w / 2, offsetPos[3].coord.y - this.dim.w /  2)
 		]
-		console.log(this.rotPoints);
-		console.log(this.coord);
 	}
 	aim(pCoord) {
 		this.degr.cannon = formA(Math.asin((this.coord.y - pCoord.y)/dist(this.coord, pCoord)), 'degr');
@@ -84,8 +82,8 @@ class Tank {
 				this.proj = new Projectile(this.type, cannonCoord, this.degr.cannon);
 			}, this.as);
 		}
-		else {
-			if (this.proj.move()) {
+		else if (this.proj != null) {
+			if (this.proj.move()) { //todo rewrite this function to hit the barrier too and detect the change
 				this.proj = null;
 			}
 			else {
@@ -94,17 +92,26 @@ class Tank {
 		}
 	}
 	rotate() {
-		console.log('+');
+		this.degr.body = formA(this.degr.body);
+		if (this.rotateTo == this.degr.body) {
+			this.rotateTo = null;
+		}
+		else if(this.rotateTo > this.degr.body || (this.rotateTo == 0 && this.degr.body == 270)) {
+			this.degr.body++;
+		}
+		else {
+			this.degr.body--;
+		}
 	}
 	move() {
 		if (this.rotateTo != null) {
 			this.rotate();
-			return
+			return;
 		}
 		this.coord.add(Math.cos(formA(this.degr.body, 'rad')), -1 * Math.sin(formA(this.degr.body, 'rad')));
 		for (let i = 0; i < 4; i++) {
-			if(this.coord.x == this.rotPoints.x && this.coord.y == this.rotPoints.y) {
-				this.rotateTo = cornerPos[i].rotateTo[rand(0, 1)];
+			if(this.coord.x == this.rotPoints[i].x && this.coord.y == this.rotPoints[i].y) {
+				this.rotateTo = offsetPos[i].rotateTo[rand(0, 1)];
 				break;
 			}
 		}
@@ -125,10 +132,5 @@ class Tank {
 		cont.rotate(formA(90 - this.degr.cannon, 'rad'));
 		cannon.onload = cont.drawImage(cannon, -cannon.width/2, -cannon.height/2, cannon.width, cannon.height);
 		cont.restore();
-		this.rotPoints.forEach(p => {
-			ctx.beginPath();
-			ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
-			ctx.fill();
-		});
 	}
 }
