@@ -2,6 +2,8 @@ class Game {
 	constructor() {	
 		this.player = new Player();
 		this.tanks = new Array();
+		this.tanksIndex = 0;
+		this.projs  = new Array();
 		this.level = 1;
 		this.money = 0;
 		this.medikit = 0;
@@ -12,7 +14,7 @@ class Game {
 		body.src = 'texture/' + type + '_body.png';
 		body.onload = () => {
 			let dim = {w: body.width, h:body.height};
-			this.tanks.push(new Tank('normal', dim, spawnPos[rand(0, 3)][rand(0, 1)]));
+			this.tanks.push(new Tank('normal', dim, spawnPos[rand(0, 3)][rand(0, 1)], this.tanksIndex++));
 		};
 	}
 	engine() {
@@ -22,6 +24,9 @@ class Game {
 			tank.aim(this.player.coord);
 		});
 		this.player.calcBarr();
+		this.projs.forEach(proj => {
+			proj.move();
+		});
 	}
 	draw() {
 		this.player.draw();

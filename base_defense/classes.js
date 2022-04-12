@@ -28,14 +28,15 @@ let mouse = {
 	click: false
 }
 class Projectile {
-	constructor(type, coord, degr) {
+	constructor(type, coord, degr, index) {
 		this.type = type;
 		this.coord = new Coord(coord.x, coord.y);
 		this.degr = degr;
 		this.damage = tank[type].damage;
 		this.speed = tank[type].speed;
+		this.blockTank = index;
 	}
-	move() { //todo must hit everything, not only the base but the barrier and the tanks
+	move() {
 		let dx = Math.cos(formA(this.degr, 'rad')) * this.speed;
 		let dy = -1 * Math.sin(formA(this.degr, 'rad')) * this.speed;
 		this.coord.add(dx, dy);
@@ -47,20 +48,21 @@ class Projectile {
 	draw() {
 		ctx.beginPath();
 		ctx.arc(this.coord.x, this.coord.y, 5, 0, Math.PI * 2);
+		ctx.fillStyle = tank[this.type].color
 		ctx.fill();
 	}
 }
 class Tank {
-	constructor(type, dim, data) {
+	constructor(type, dim, data, index) {
 		this.type = type;
 		this.dim = dim;
+		this.index = index;
 		let dimx = (data.degr % 180 == 0)? this.dim.h /2 : this.dim.w /2;
 		let dimy = (data.degr % 180 == 0)? this.dim.w /2 : this.dim.h /2;
 		this.coord = addCoord(data.coord, dimx * data.multX, dimy * data.multY);
 		this.degr = {body: data.degr, cannon: 0}
 		this.hp = tank[type].hp;
 		this.as = tank[type].as;
-		this.proj = null;
 		this.rotateTo = null;
 		this.rotPoints = [
 			new Coord(offsetPos[0].coord.x + this.dim.w / 2, offsetPos[0].coord.y + this.dim.w /  2),
@@ -80,7 +82,7 @@ class Tank {
 		{
 			setTimeout(() => {
 				let cannonCoord = this.coord;
-				this.proj = new Projectile(this.type, cannonCoord, this.degr.cannon);
+				this.proj = new Projectile(this.type, cannonCoord, this.degr.cannon, this.index);
 			}, this.as);
 		}
 		else if (this.proj != null) {

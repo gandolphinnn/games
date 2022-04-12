@@ -6,6 +6,7 @@ window.onload = function() {
 	document.addEventListener('mousedown', function(e) {
 		if (e.button == 0)
 			mouse.click = true;
+		console.log(game.tanks);
 	});
 	document.addEventListener('mouseup', function(e) {
 		mouse.click = false;

@@ -18,18 +18,31 @@ function addCoord(coord, addx, addy) {
 function dist(coord1, coord2) {
 	return Math.sqrt(((coord1.x - coord2.x) ** 2) + ((coord1.y - coord2.y) ** 2));
 }
-let tank = {
+const tankTypes = ['normal', 'rocket', 'minigun'];
+const tank = {
 	normal: {
 		hp: 10,
-		speed: 4,
-		damage: 1,
-		as: 1500
+		as: 1500,
+
+		speed: 6,
+		damage: 2,
+		color: '#1f4d1a'
 	},
 	rocket: {
 		hp: 10,
+		as: 2500,
+
 		speed: 2,
+		damage: 5,
+		color: 'red'
+	},
+	minigun: {
+		hp: 20,
+		as: 500,
+
+		speed: 5,
 		damage: 1,
-		as: 2500
+		color: 'black'
 	}
 }
 const player = {
