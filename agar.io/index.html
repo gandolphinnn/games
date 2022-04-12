@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Platform</title>
+		<link rel="stylesheet" href="../style.css">
+	</head>
+	<body style="background-color: rgb(218, 213, 213);">
+		<canvas style="height: 100%; width: 100%"></canvas>
+		<script>
+			let canvas = document.querySelector("canvas");
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			let ctx = canvas.getContext("2d");
+			ctx.strokeStyle = '1px'
+			const map = {h: 5000, w: 5000};
+			const view = {h: canvas.height/2, w: canvas.width/2}
+			let move = {
+				up: false,
+				down: false,
+				left: false,
+				right: false
+			};
+		</script>
+		<script src="data.js"></script>
+		<script src="classes.js"></script>
+		<script src="game.js"></script>
+		<script src="main.js"></script>
+	</body>
+</html>
