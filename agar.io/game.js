@@ -8,14 +8,22 @@ class Game {
 	}
 	engine() {
 		player.move();
+		this.points.forEach(point => {
+			if(point.absorbed()) {
+				player.area += point.area;
+				player.radius = Math.sqrt(player.area / Math.PI);
+				point = new Point(new Coord(rand(map.w), rand(map.h)), 100, colors[rand(colors.length-1)]);
+			}
+		});
 	}
 	draw() {
-		player.draw();
+		//todo add a grid
 		this.points.forEach(point => {
 			if (point.coord.x >= player.coord.x-view.w && point.coord.x <= player.coord.x+view.w
 				&& point.coord.y >= player.coord.y-view.h && point.coord.y <= player.coord.y+view.h) {
-					point.draw(player.coord);
+					point.draw();
 			}
 		});
+		player.draw();
 	}
 }

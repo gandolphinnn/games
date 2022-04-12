@@ -1,45 +1,23 @@
-class Coord {
-	constructor(x, y) { //* represent the position based on the whole map
-		this.x = x;
-		this.y = y;
-	}
-	set(newx, newy) {
-		this.x = newx;
-		this.y = newy;
-	}
-	add(addX, addY) {
-		this.x += addX;
-		this.y += addY;
-	}	
-}
-function circle(coord, radius) {
-	ctx.beginPath();
-	ctx.arc(coord.x, coord.y, radius, 0, Math.PI * 2);
-	ctx.fill();
-}
-function rand(min, max) {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function rand(max) {
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - 1));
-}
-let mousePos = new Coord();
-
 class Point {
 	constructor(coord, area, color) {
 		this.coord = coord;
 		this.area = area;
 		this.radius = Math.sqrt(this.area / Math.PI);
-		this.radius = 10;
 		this.color = color;
 	}
-	draw(playerC) {
+	absorbed() {
+		if (this.coord.dist(player.coord) <= this.radius) {
+			console.log('ù');
+			player.area += this.area;
+			player.radius = Math.sqrt(player.area / Math.PI);
+			this.coord = new Coord(rand(map.w), rand(map.h));
+			this.color = colors[rand(colors.length-1)];
+		}
+		return false;
+	}
+	draw() {
 		ctx.fillStyle = this.color;
-		let viewC = new Coord(this.coord.x-(playerC.x-view.w), this.coord.y-(playerC.y-view.h));
-		console.log(viewC);
+		let viewC = new Coord(this.coord.x-(player.coord.x-view.w), this.coord.y-(player.coord.y-view.h));
 		circle(viewC, this.radius);
 	}
 }
@@ -53,16 +31,16 @@ class Player {
 		this.speed = 5;
 	}
 	move() {
-		if (move.up) {
+		if (key.up && this.coord.y > this.radius ) {
 			this.coord.y -= this.speed;
 		}
-		if (move.down) {
+		if (key.down && this.coord.y < map.h - this.radius) {
 			this.coord.y += this.speed;
 		}
-		if (move.left) {
+		if (key.left && this.coord.x > this.radius ) {
 			this.coord.x -= this.speed;
 		}
-		if (move.right) {
+		if (key.right && this.coord.x < map.w - this.radius) {
 			this.coord.x += this.speed;
 		}
 	}
