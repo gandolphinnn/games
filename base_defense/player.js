@@ -7,7 +7,7 @@ class Barrier extends RigidRect{
 			r: player.dim.r
 		};
 	}
-	calcPos() {
+	calcBar() {
 		let mAngle = formA(Math.asin((this.base.c.y - mouse.pos.y)/dist(this.base.c, mouse.pos)), 'degr');
 		if (mouse.pos.x == null || mouse.pos.y == null)
 			mAngle = 90;

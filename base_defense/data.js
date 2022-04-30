@@ -1,29 +1,5 @@
-<<<<<<< HEAD
-let tank = {
-=======
-class Coord {
-	constructor(x, y) {
-		this.x = x;
-		this.y = y;
-	}
-	set(newx, newy) {
-		this.x = newx;
-		this.y = newy;
-	}
-	add(addx, addy) {
-		this.x += addx;
-		this.y += addy;
-	}
-}
-function addCoord(coord, addx, addy) {
-	return new Coord(coord.x + addx, coord.y + addy);
-}
-function dist(coord1, coord2) {
-	return Math.sqrt(((coord1.x - coord2.x) ** 2) + ((coord1.y - coord2.y) ** 2));
-}
 const tankTypes = ['normal', 'rocket', 'minigun'];
 const tank = {
->>>>>>> 0f2de9830509908efe7e56d514682dedfb1b5ad9
 	normal: {
 		hp: 10,
 		as: 1500,

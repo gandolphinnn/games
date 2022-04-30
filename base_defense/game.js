@@ -14,11 +14,7 @@ class Game {
 		body.src = 'texture/' + type + '_body.png';
 		body.onload = () => {
 			let dim = {w: body.width, h:body.height};
-<<<<<<< HEAD
-			this.tanks.push(new Tank('normal', dim, spawnPos[rand0(3)][rand0(1)]));
-=======
 			this.tanks.push(new Tank('normal', dim, spawnPos[rand(0, 3)][rand(0, 1)], this.tanksIndex++));
->>>>>>> 0f2de9830509908efe7e56d514682dedfb1b5ad9
 		};
 	}
 	engine() {
@@ -27,14 +23,10 @@ class Game {
 			tank.move();
 			tank.aim(this.player.coord);
 		});
-<<<<<<< HEAD
-		this.player.barr.calcPos();
-=======
 		this.player.calcBarr();
 		this.projs.forEach(proj => {
 			proj.move();
 		});
->>>>>>> 0f2de9830509908efe7e56d514682dedfb1b5ad9
 	}
 	draw() {
 		this.player.draw();
